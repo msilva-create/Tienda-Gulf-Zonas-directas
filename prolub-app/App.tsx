@@ -6,7 +6,6 @@ import { sendOrderToGoogleSheet } from './services/googleSheets';
 import { AdminPanel } from './components/AdminPanel';
 import html2canvas from 'html2canvas';
 import { jsPDF } from "jspdf";
-import emailjs from '@emailjs/browser';
 
 type ViewState = 'login' | 'store' | 'checkout' | 'success' | 'admin' | 'profile';
 
@@ -1290,68 +1289,7 @@ const App = () => {
     const currentTimeStr = now.toLocaleTimeString('es-CO');
     setRedemptionDate(currentDateStr + ' ' + currentTimeStr);
 
-    let emailSent = false;
-    let emailError = '';
-
-    const itemsText = cart.map(c => `- ${c.quantity}x ${c.name} (${c.appliedPrice} pts)`).join('\n');
     const itemsLine = cart.map(c => `${c.quantity}x ${c.name}`).join(', ');
-
-    // Construct detailed shipping block for Email
-    const logisticsBlock = `
-DATOS DE LOGÍSTICA DE ENVÍO:
-----------------------------
-CLIENTE: ${currentUser.pointOfSale} (ID: ${currentUser.businessId})
-RECEPTOR: ${orderDetails.receiver}
-CIUDAD: ${orderDetails.city}
-DIRECCIÓN: ${orderDetails.address}
-TELÉFONO: ${orderDetails.phone}
-----------------------------
-`;
-
-    try {
-        const SERVICE_ID = 'service_hdlsj5r';
-        const TEMPLATE_ID = 'template_rrqgdym';
-        const PUBLIC_KEY = 'pfbP31YCRZ3dzBat5';
-        
-        const adminEmails = "asismercadeo@gulfcolombia.com,msilva@prolub.com.co";
-
-        emailjs.init(PUBLIC_KEY);
-
-        const templateParams = {
-            to_email: adminEmails,
-            email: adminEmails, // Added to ensure recipient address is found by EmailJS template
-            nombre: currentUser.pointOfSale,
-            nombre_cliente: currentUser.pointOfSale,
-            producto: cart.map(item => item.name).join(", "),
-            receptor: orderDetails.receiver,
-            cantidad: cart.reduce((acc, item) => acc + item.quantity, 0),
-            direccion: orderDetails.address,
-            telefono: orderDetails.phone,
-            ciudad: orderDetails.city,
-            puntos: total,
-        };
-        
-        console.log("Enviando Email...", templateParams);
-
-        const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
-        console.log('EmailJS Response:', response);
-
-        if (response.status === 200) {
-           emailSent = true;
-        } else {
-           throw new Error(`Status ${response.status}: ${response.text}`);
-        }
-
-    } catch (error: any) {
-        let errorMsg = 'Unknown error';
-        if (error instanceof Error) errorMsg = error.message;
-        else if (typeof error === 'object' && error?.text) errorMsg = error.text;
-        else errorMsg = String(error);
-
-        console.error('Email Failed (Checkout continued):', errorMsg);
-        emailSent = false;
-        emailError = errorMsg;
-    }
 
     const success = deductPoints(currentUser.pointOfSale, total);
     
