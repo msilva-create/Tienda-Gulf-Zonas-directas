@@ -3,7 +3,7 @@ import { OrderLog } from '../types';
 // --- CONFIGURACIÓN ---
 // Pega aquí la URL de la Aplicación Web que generaste en Google Apps Script
 // Ejemplo: "https://script.google.com/macros/s/AKfycbx.../exec"
-export const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkMqsgRgqXPPzmpwuwSKRvRKxZnozJe-XSuyIlOUI2rdyLJw_JQQDo_7FJwiGAqyLu5Q/exec'; 
+export const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyAV-2jXU-8U8jtKQhz5YldMd_ICWKUvkkUTMijKNYJ_4phIFKjhX7SeA989p7qOPeI/exec'; 
 
 export const sendOrderToGoogleSheet = async (order: OrderLog) => {
   if (!GOOGLE_SCRIPT_URL) {
