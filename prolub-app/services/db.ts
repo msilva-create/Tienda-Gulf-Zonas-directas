@@ -1,7 +1,7 @@
 import { Client, ClientPoints, Reward, Database, ClientType, OrderLog } from '../types';
 import { REWARDS_DATA } from './rewards_data';
 
-const DB_KEY = 'gulf_prolub_db_v41';
+const DB_KEY = 'gulf_prolub_db_v42';
 const GLOBAL_ORDER_HISTORY_KEY = 'gulf_prolub_global_orders_v1';
 const DEFAULT_POINTS = 0; 
 
